@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavItems from "@/components/NavItems";
+import UserDropdown from "@/components/UserDropdown";
 
-const Header: () => Element = () => {
+const Header = () => {
   return (
     <header className="sticky top-0 header">
       <div className="container header-wrapper">
@@ -18,6 +19,7 @@ const Header: () => Element = () => {
         <nav className="hidden sm:block">
           <NavItems />
         </nav>
+        <UserDropdown />
       </div>
     </header>
   );
