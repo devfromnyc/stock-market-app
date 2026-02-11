@@ -1,4 +1,6 @@
-import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import NavItems from "@/components/NavItems";
 
 const Header: () => Element = () => {
   return (
@@ -14,9 +16,7 @@ const Header: () => Element = () => {
           />
         </Link>
         <nav className="hidden sm:block">
-          <ul className="header-nav-list">
-            {/* Nav Items */}
-            {/* User Dropdown */}
+          <NavItems />
         </nav>
       </div>
     </header>
