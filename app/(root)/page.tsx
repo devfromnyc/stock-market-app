@@ -11,6 +11,16 @@ const Home = () => {
             scriptUrl="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js"
             config={MARKET_OVERVIEW_WIDGET_CONFIG}
             className="custom-chart"
+            height={600}
+          />
+        </div>
+        <div className="md:col-span-1 xl:col-span-2">
+          <TradingViewWidget
+            title="Stock Heatmap"
+            scriptUrl="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js"
+            config={MARKET_OVERVIEW_WIDGET_CONFIG}
+            className="custom-chart"
+            height={600}
           />
         </div>
       </section>
