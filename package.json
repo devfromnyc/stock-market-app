@@ -10,6 +10,7 @@
     "test:db": "node --env-file=.env scripts/test-db.mjs"
   },
   "dependencies": {
+    "better-auth": "^1.4.19",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
