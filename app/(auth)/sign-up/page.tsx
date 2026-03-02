@@ -11,12 +11,12 @@ import {
 } from "@/lib/constants";
 import { CountrySelectField } from "@/components/forms/CountrySelectField";
 import FooterLink from "@/components/forms/FooterLink";
-// import {signUpWithEmail} from "@/lib/actions/auth.actions";
-// import {useRouter} from "next/navigation";
-// import {toast} from "sonner";
+import { signUpWithEmail } from "@/lib/actions/auth.actions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const SignUp = () => {
-  // const router = useRouter()
+  const router = useRouter();
   const {
     register,
     handleSubmit,

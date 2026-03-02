@@ -3,14 +3,11 @@ import {
   NEWS_SUMMARY_EMAIL_PROMPT,
   PERSONALIZED_WELCOME_EMAIL_PROMPT,
 } from "@/lib/inngest/prompts";
-// TODO: implement these modules/functions
-// import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/nodemailer";
-// import { getAllUsersForNewsEmail } from "@/lib/actions/user.actions";
-// import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
-// import { getNews } from "@/lib/actions/finnhub.actions";
-// import { getFormattedTodayDate } from "@/lib/utils";
-
-type UserForNewsEmail = { email: string };
+import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/nodemailer";
+import { getAllUsersForNewsEmail } from "@/lib/actions/user.actions";
+import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
+import { getNews } from "@/lib/actions/finnhub.actions";
+import { getFormattedTodayDate } from "@/lib/utils";
 
 export const sendSignUpEmail = inngest.createFunction(
   { id: "sign-up-email" },
@@ -50,8 +47,7 @@ export const sendSignUpEmail = inngest.createFunction(
         data: { email, name },
       } = event;
 
-      // return await sendWelcomeEmail({ email, name, intro: introText });
-      throw new Error("TODO: implement sendWelcomeEmail");
+      return await sendWelcomeEmail({ email, name, intro: introText });
     });
 
     return {
@@ -66,11 +62,7 @@ export const sendDailyNewsSummary = inngest.createFunction(
   [{ event: "app/send.daily.news" }, { cron: "0 12 * * *" }],
   async ({ step }) => {
     // Step #1: Get all users for news delivery
-    // const users = await step.run("get-all-users", getAllUsersForNewsEmail);
-    const users = await step.run("get-all-users", async () => {
-      // TODO: implement getAllUsersForNewsEmail
-      return [] as UserForNewsEmail[];
-    });
+    const users = await step.run("get-all-users", getAllUsersForNewsEmail);
 
     if (!users || users.length === 0)
       return { success: false, message: "No users found for news email" };
@@ -78,17 +70,18 @@ export const sendDailyNewsSummary = inngest.createFunction(
     // Step #2: For each user, get watchlist symbols -> fetch news (fallback to general)
     const results = await step.run("fetch-user-news", async () => {
       const perUser: Array<{
-        user: UserForNewsEmail;
+        user: (typeof users)[number];
         articles: MarketNewsArticle[];
       }> = [];
-      for (const user of users as UserForNewsEmail[]) {
+      for (const user of users) {
         try {
-          // const symbols = await getWatchlistSymbolsByEmail(user.email);
-          // let articles = await getNews(symbols);
-          // if (!articles || articles.length === 0) articles = await getNews();
-          const symbols: string[] = []; // TODO: implement getWatchlistSymbolsByEmail
-          let articles: MarketNewsArticle[] = []; // TODO: implement getNews
+          const symbols = await getWatchlistSymbolsByEmail(user.email);
+          let articles = await getNews(symbols);
           articles = (articles || []).slice(0, 6);
+          if (!articles || articles.length === 0) {
+            articles = await getNews();
+            articles = (articles || []).slice(0, 6);
+          }
           perUser.push({ user, articles });
         } catch (e) {
           console.error("daily-news: error preparing user news", user.email, e);
@@ -98,9 +91,9 @@ export const sendDailyNewsSummary = inngest.createFunction(
       return perUser;
     });
 
-    // Step #3: (placeholder) Summarize news via AI
+    // Step #3: Summarize news via AI
     const userNewsSummaries: {
-      user: UserForNewsEmail;
+      user: (typeof results)[number]["user"];
       newsContent: string | null;
     }[] = [];
 
@@ -129,18 +122,17 @@ export const sendDailyNewsSummary = inngest.createFunction(
       }
     }
 
-    // Step #4: (placeholder) Send the emails
+    // Step #4: Send the emails
     await step.run("send-news-emails", async () => {
       await Promise.all(
         userNewsSummaries.map(async ({ user, newsContent }) => {
           if (!newsContent) return false;
 
-          // return await sendNewsSummaryEmail({
-          //   email: user.email,
-          //   date: getFormattedTodayDate(),
-          //   newsContent,
-          // });
-          throw new Error("TODO: implement sendNewsSummaryEmail and getFormattedTodayDate");
+          return await sendNewsSummaryEmail({
+            email: user.email,
+            date: getFormattedTodayDate(),
+            newsContent,
+          });
         }),
       );
     });
