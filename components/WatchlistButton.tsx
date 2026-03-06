@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 
 // Minimal WatchlistButton implementation to satisfy page requirements.
 // This component focuses on UI contract only. It toggles local state and
@@ -14,6 +14,9 @@ const WatchlistButton = ({
   onWatchlistChange,
 }: WatchlistButtonProps) => {
   const [added, setAdded] = useState<boolean>(!!isInWatchlist);
+  useEffect(() => {
+    setAdded(!!isInWatchlist);
+  }, [isInWatchlist]);
 
   const label = useMemo(() => {
     if (type === "icon") return added ? "" : "";

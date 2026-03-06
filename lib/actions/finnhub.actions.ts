@@ -107,6 +107,50 @@ export async function getNews(
   }
 }
 
+type FinnhubQuote = {
+  c?: number; // current price
+  d?: number; // change
+  dp?: number; // percent change
+  h?: number;
+  l?: number;
+  o?: number;
+  pc?: number;
+  t?: number;
+};
+
+export async function getQuote(symbol: string): Promise<FinnhubQuote | null> {
+  try {
+    const token =
+      process.env.FINNHUB_API_KEY ?? process.env.NEXT_PUBLIC_FINNHUB_API_KEY ?? "";
+    if (!token) return null;
+    const url = `${FINNHUB_BASE_URL}/quote?symbol=${encodeURIComponent(symbol)}&token=${token}`;
+    const data = await fetchJSON<FinnhubQuote>(url, 60);
+    return data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getQuotes(symbols: string[]): Promise<Record<string, FinnhubQuote>> {
+  const result: Record<string, FinnhubQuote> = {};
+  if (!symbols.length) return result;
+  const token =
+    process.env.FINNHUB_API_KEY ?? process.env.NEXT_PUBLIC_FINNHUB_API_KEY ?? "";
+  if (!token) return result;
+
+  await Promise.all(
+    symbols.map(async (sym) => {
+      try {
+        const q = await getQuote(sym);
+        if (q) result[sym] = q;
+      } catch {
+        // ignore
+      }
+    })
+  );
+  return result;
+}
+
 export const searchStocks = cache(
   async (query?: string): Promise<StockWithWatchlistStatus[]> => {
     try {

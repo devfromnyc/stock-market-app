@@ -7,8 +7,10 @@ import SearchCommand from "./SearchCommand";
 
 const NavItems = ({
   initialStocks,
+  watchlistSymbols,
 }: {
   initialStocks: StockWithWatchlistStatus[];
+  watchlistSymbols?: Set<string>;
 }) => {
   const pathname = usePathname();
 
@@ -28,6 +30,7 @@ const NavItems = ({
                 renderAs="text"
                 label="Search"
                 initialStocks={initialStocks}
+                watchlistSymbols={watchlistSymbols}
               />
             </li>
           );

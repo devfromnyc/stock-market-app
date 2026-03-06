@@ -59,6 +59,9 @@ declare global {
     renderAs?: "button" | "text";
     label?: string;
     initialStocks: StockWithWatchlistStatus[];
+    watchlistSymbols?: Set<string>;
+    onWatchlistChange?: (symbol: string, isAdded: boolean) => void | Promise<void>;
+    onStockAdded?: () => void;
   };
 
   type WelcomeEmailData = {
@@ -168,14 +171,6 @@ declare global {
     news?: MarketNewsArticle[];
   };
 
-  type SearchCommandProps = {
-    open?: boolean;
-    setOpen?: (open: boolean) => void;
-    renderAs?: "button" | "text";
-    buttonLabel?: string;
-    buttonVariant?: "primary" | "secondary";
-    className?: string;
-  };
 
   type AlertData = {
     symbol: string;
