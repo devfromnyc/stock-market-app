@@ -1,7 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@/database/mongoose";
-import { Watchlist } from "@/database/models/watchlist.model";
+import { Watchlist } from "../../database/models/watchlist.model";
 
 export async function getWatchlistSymbolsByEmail(
   email: string,
@@ -23,7 +23,11 @@ export async function getWatchlistSymbolsByEmail(
     const userId = (user.id as string) || String(user._id || "");
     if (!userId) return [];
 
-    const items = await Watchlist.find({ userId }, { symbol: 1 }).lean();
+    const items = await Watchlist.find<{ symbol: unknown }>(
+      { userId },
+      { symbol: 1 },
+    ).lean();
+
     return items.map((i) => String(i.symbol));
   } catch (err) {
     console.error("getWatchlistSymbolsByEmail error:", err);
