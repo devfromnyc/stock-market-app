@@ -16,6 +16,10 @@
   <h3 align="center">Stock Market App — Alerts, Charts, AI Insights</h3>
 
   <p align="center">A modern stock market app for tracking prices, managing watchlists, and exploring company insights.</p>
+
+  <p align="center">
+    <a href="https://stock-market-app-beta-eight.vercel.app/">🚀 Live Demo</a>
+  </p>
 </div>
 
 ## 📋 <a name="table">Table of Contents</a>
@@ -27,7 +31,7 @@
 
 ## <a name="introduction">✨ Introduction</a>
 
-Modern stock market app built with Next.js, Shadcn, Better Auth, and Inngest. Track real-time prices, set personalized alerts, explore company insights, and manage watchlists. The app uses event-driven workflows for automated alerts, AI-driven daily digests, earnings notifications, and sentiment analysis—ideal for building a dynamic, real-time financial platform.
+Modern stock market app built with Next.js, Shadcn, Better Auth, and Inngest. **[View live demo →](https://stock-market-app-beta-eight.vercel.app/)** Track real-time prices, set personalized alerts, explore company insights, and manage watchlists. The app uses event-driven workflows for automated alerts, AI-driven daily digests, earnings notifications, and sentiment analysis—ideal for building a dynamic, real-time financial platform.
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
