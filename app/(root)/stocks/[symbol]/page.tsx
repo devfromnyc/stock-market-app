@@ -1,5 +1,4 @@
-import { headers } from "next/headers";
-import { auth } from "@/lib/better-auth/auth";
+import { getServerSession } from "@/lib/better-auth/auth";
 import TradingViewWidget from "@/components/TradingViewWidget";
 import StockPageWatchlistButton from "@/components/StockPageWatchlistButton";
 import {
@@ -15,7 +14,7 @@ import { getWatchlistSymbolsByUserId } from "@/lib/actions/watchlist.actions";
 export default async function StockDetails({ params }: StockDetailsPageProps) {
   const { symbol } = await params;
   const sym = symbol.toUpperCase();
-  const session = await auth?.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   const userId = session?.user?.id ?? "";
   const watchlistSymbols = await getWatchlistSymbolsByUserId(userId);
   const isInWatchlist = watchlistSymbols.includes(sym);

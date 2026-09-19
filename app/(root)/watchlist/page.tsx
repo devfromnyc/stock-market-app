@@ -1,5 +1,4 @@
-import { auth } from "@/lib/better-auth/auth";
-import { headers } from "next/headers";
+import { getServerSession } from "@/lib/better-auth/auth";
 import { redirect } from "next/navigation";
 import {
   getWatchlistWithData,
@@ -9,7 +8,7 @@ import { searchStocks } from "@/lib/actions/finnhub.actions";
 import WatchlistPageClient from "./WatchlistPageClient";
 
 export default async function WatchlistPage() {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   if (!session?.user) redirect("/sign-in");
 
   const userId = session.user.id;

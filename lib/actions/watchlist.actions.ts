@@ -2,11 +2,10 @@
 
 import { connectToDatabase } from "@/database/mongoose";
 import { Watchlist } from "../../database/models/watchlist.model";
-import { headers } from "next/headers";
-import { auth } from "@/lib/better-auth/auth";
+import { getServerSession } from "@/lib/better-auth/auth";
 
 async function getCurrentUserId(): Promise<string | null> {
-  const session = await auth.api.getSession({ headers: await headers() });
+  const session = await getServerSession();
   return session?.user?.id ?? null;
 }
 
